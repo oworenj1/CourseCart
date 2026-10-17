@@ -66,15 +66,23 @@ function Suppliers({
           <p>Manage supplier contacts and information.</p>
         </div>
 
-        {supplierView === "active" && (
-          <button
-            type="button"
-            className="primary-button"
-            onClick={toggleSupplierForm}
-          >
-            + Add Supplier
-          </button>
-        )}
+
+          {supplierView === "active" && (
+            <button
+              type="button"
+              className="primary-button"
+              onClick={toggleSupplierForm}
+              disabled={showSupplierForm || supplierSaving}
+              title={
+                showSupplierForm
+                  ? "Finish or cancel the current supplier form first."
+                  : "Add a new supplier"
+              }
+            >
+              {showSupplierForm ? "Supplier Form Open" : "+ Add Supplier"}
+            </button>
+          )}
+
       </div>
 
       {supplierSuccess && (

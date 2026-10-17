@@ -61,10 +61,56 @@ function UserManagement({
       />
       <div className="panel-heading">
         <div><h3>Accounts</h3><p>Create accounts and manage staff access by role.</p></div>
-        {usersView === "active" && <button type="button" className="primary-button" onClick={toggleUserForm}>{showUserForm ? "Close Form" : "+ Add User"}</button>}
+
+
+          {usersView === "active" && (
+            <button
+              type="button"
+              className="primary-button"
+              disabled={usersSaving}
+              onClick={() => {
+                if (showUserForm) {
+                  const confirmed = window.confirm(
+                    "Are you sure you want to close this user form? Your unsaved changes will be lost."
+                  );
+
+                  if (confirmed) {
+                    cancelUserForm();
+                  }
+                } else {
+                  toggleUserForm();
+                }
+              }}
+            >
+              {showUserForm ? "Close Form" : "+ Add User"}
+            </button>
+          )}
+
+
       </div>
       {usersSuccess && <p className="category-success">{usersSuccess}</p>}
-      {showUserForm && usersView === "active" && <UserForm authUser={authUser} userForm={userForm} setUserForm={setUserForm} editingUserId={editingUserId} usersError={usersError} usersSaving={usersSaving} saveUser={saveUser} onCancel={cancelUserForm} />}
+      
+      {showUserForm && usersView === "active" && (
+        <UserForm
+          authUser={authUser}
+          userForm={userForm}
+          setUserForm={setUserForm}
+          editingUserId={editingUserId}
+          usersError={usersError}
+          usersSaving={usersSaving}
+          saveUser={saveUser}
+          onCancel={() => {
+            const confirmed = window.confirm(
+              "Are you sure you want to cancel? Your unsaved changes will be lost."
+            );
+
+            if (confirmed) {
+              cancelUserForm();
+            }
+          }}
+        />
+      )}
+
 
       <div className="user-filter-grid">
         <label className="user-filter-search">Search

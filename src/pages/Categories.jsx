@@ -68,15 +68,23 @@ function Categories({
           <p>Organize your school supplies.</p>
         </div>
 
-        {categoryView === "active" && (
-          <button
-            type="button"
-            className="primary-button"
-            onClick={toggleCategoryForm}
-          >
-            + Add Category
-          </button>
-        )}
+
+          {categoryView === "active" && (
+            <button
+              type="button"
+              className="primary-button"
+              onClick={toggleCategoryForm}
+              disabled={showCategoryForm}
+              title={
+                showCategoryForm
+                  ? "Finish or cancel the current category form first."
+                  : "Add a new category"
+              }
+            >
+              {showCategoryForm ? "Category Form Open" : "+ Add Category"}
+            </button>
+          )}
+
       </div>
 
       {categorySuccess && (

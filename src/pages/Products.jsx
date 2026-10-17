@@ -125,15 +125,23 @@ function Products({
           <p>Manage school supplies and stock.</p>
         </div>
 
-        {productView === "active" && (
-          <button
-            type="button"
-            className="primary-button"
-            onClick={openAddProduct}
-          >
-            + Add Product
-          </button>
-        )}
+        
+          {productView === "active" && (
+            <button
+              type="button"
+              className="primary-button"
+              onClick={openAddProduct}
+              disabled={showProductForm}
+              title={
+                showProductForm
+                  ? "Finish or cancel the current product form first."
+                  : "Add a new product"
+              }
+            >
+              {showProductForm ? "Product Form Open" : "+ Add Product"}
+            </button>
+          )}
+
       </div>
 
       {productSuccess && (

@@ -1,5 +1,4 @@
-// Text shown in the page heading above the tabs.
-// Note: "reports" and "pos" fall through to the defaults, exactly as before.
+
 const TITLES = {
   dashboard: () => "Dashboard",
   "activity-logs": () => "Activity Logs",
@@ -13,13 +12,23 @@ const TITLES = {
   "purchase-orders": () => "Purchase Orders",
   "stock-movements": () => "Stock Movement History",
   sales: () => "Sales / Transaction History",
+  reports: () => "Reports & Analytics",
+  pos: () => "Point of Sale",
 };
 
 const SUBTITLES = {
   pos: "Select products, manage your cart, and complete a sale.",
+  reports:
+    "View sales performance, best-selling products, and current inventory reports.",
   users: "Manage staff accounts, roles, and account access.",
   "activity-logs": "Review important actions recorded in CourseCart.",
   dashboard: "Your CourseCart workspace overview.",
+  products: "Manage your school supply inventory.",
+  categories: "Organize products into categories.",
+  suppliers: "Manage your suppliers and their contact information.",
+  "purchase-orders": "Create purchase orders and manage stock receiving.",
+  "stock-movements": "Track inventory stock movements and adjustments.",
+  sales: "Review completed sales and transaction records.",
 };
 
 const COUNT_LABELS = {
@@ -31,13 +40,13 @@ const COUNT_LABELS = {
   "purchase-orders": "Purchase Orders",
   "stock-movements": "Movements",
   sales: "Transactions",
+  reports: "Products",
+  pos: "Products",
 };
 
 export const getPageHeading = (module, views, counts) => ({
-  title: (TITLES[module] || (() => "Point of Sale"))(views),
-  subtitle:
-    SUBTITLES[module] ||
-    "Manage products, categories, suppliers, purchase orders, and stock history.",
-  countLabel: COUNT_LABELS[module] || "Products",
+  title: (TITLES[module] || (() => "Dashboard"))(views),
+  subtitle: SUBTITLES[module] || "Welcome to your CourseCart workspace.",
+  countLabel: COUNT_LABELS[module] || "Items",
   count: module in counts ? counts[module] : counts.pos,
 });

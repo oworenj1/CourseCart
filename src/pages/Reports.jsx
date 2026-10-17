@@ -3,7 +3,9 @@ import { buildSalesReport } from "../utils/reportCalculations";
 import { downloadReportPdf } from "../utils/reportPdf";
 import { reportPrintStyles } from "../utils/reportPrintStyles";
 import { formatAmount } from "../utils/formatters";
+import { useState } from "react";
 import { DEFAULT_REORDER_LEVEL, isLowStock } from "../utils/stock";
+
 
 function Reports({
   sales,
@@ -17,6 +19,8 @@ function Reports({
   salesLoading,
   salesError,
 }) {
+
+  
   const report = buildSalesReport({
     sales,
     products,
@@ -33,6 +37,45 @@ function Reports({
     lowStock,
     totalStock,
   } = report;
+
+  const [inventoryPage, setInventoryPage] = useState(1);
+  const [bestSellingPage, setBestSellingPage] = useState(1);
+  const inventoryPageSize = 10;
+  const bestSellingPageSize = 10;
+
+  const sortedInventory = activeProducts
+    .slice()
+    .sort((a, b) => Number(a.stock) - Number(b.stock));
+
+  const totalInventoryPages = Math.max(
+    1,
+    Math.ceil(sortedInventory.length / inventoryPageSize)
+  );
+
+  const safeInventoryPage = Math.min(
+    inventoryPage,
+    totalInventoryPages
+  );
+
+  const paginatedInventory = sortedInventory.slice(
+    (safeInventoryPage - 1) * inventoryPageSize,
+    safeInventoryPage * inventoryPageSize
+  );
+
+  const totalBestSellingPages = Math.max(
+    1,
+    Math.ceil(rankedProducts.length / bestSellingPageSize)
+  );
+
+  const safeBestSellingPage = Math.min(
+    bestSellingPage,
+    totalBestSellingPages
+  );
+
+  const paginatedBestSelling = rankedProducts.slice(
+    (safeBestSellingPage - 1) * bestSellingPageSize,
+    safeBestSellingPage * bestSellingPageSize
+  );
 
   const handleExportPdf = () => {
     if (reportStartDate && reportEndDate && reportStartDate > reportEndDate) {
@@ -157,7 +200,7 @@ function Reports({
                   </tr>
                 </thead>
                 <tbody>
-                  {rankedProducts.map((item) => (
+                  {paginatedBestSelling.map((item) => (
                     <tr key={item.name}>
                       <td>{item.name}</td>
                       <td>{item.quantity}</td>
@@ -172,6 +215,45 @@ function Reports({
                 </p>
               )}
             </div>
+
+            {rankedProducts.length > 0 && (
+              <div className="user-pagination">
+                <span>
+                  Showing{" "}
+                  {(safeBestSellingPage - 1) * bestSellingPageSize + 1}
+                  –
+                  {Math.min(
+                    safeBestSellingPage * bestSellingPageSize,
+                    rankedProducts.length
+                  )}{" "}
+                  of {rankedProducts.length} products
+                </span>
+
+                <div className="user-pagination-buttons">
+                  <button
+                    type="button"
+                    className="secondary-button"
+                    disabled={safeBestSellingPage === 1}
+                    onClick={() => setBestSellingPage((page) => page - 1)}
+                  >
+                    Previous
+                  </button>
+
+                  <span>
+                    Page {safeBestSellingPage} of {totalBestSellingPages}
+                  </span>
+
+                  <button
+                    type="button"
+                    className="secondary-button"
+                    disabled={safeBestSellingPage === totalBestSellingPages}
+                    onClick={() => setBestSellingPage((page) => page + 1)}
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
           <div className="receiving-panel" style={{ marginTop: 20 }}>
             <div className="panel-heading">
@@ -196,6 +278,7 @@ function Reports({
                 <strong>{lowStock.length}</strong>
               </article>
             </div>
+            
             <div className="po-table-wrapper">
               <table className="po-table">
                 <thead>
@@ -208,32 +291,70 @@ function Reports({
                   </tr>
                 </thead>
                 <tbody>
-                  {activeProducts
-                    .slice()
-                    .sort((a, b) => Number(a.stock) - Number(b.stock))
-                    .map((product) => {
-                      const isLow = isLowStock(product);
-                      return (
-                        <tr key={product._id}>
-                          <td>{product.name}</td>
-                          <td>{product.category || "—"}</td>
-                          <td>{product.stock}</td>
-                          <td>
-                            {product.reorderLevel ?? DEFAULT_REORDER_LEVEL}
-                          </td>
-                          <td>
-                            <span
-                              className={`po-status ${isLow ? "pending" : "received"}`}
-                            >
-                              {isLow ? "Low Stock" : "In Stock"}
-                            </span>
-                          </td>
-                        </tr>
-                      );
-                    })}
+                  {paginatedInventory.map((product) => {
+                    const isLow = isLowStock(product);
+
+                    return (
+                      <tr key={product._id}>
+                        <td>{product.name}</td>
+                        <td>{product.category || "—"}</td>
+                        <td>{product.stock}</td>
+                        <td>{product.reorderLevel ?? DEFAULT_REORDER_LEVEL}</td>
+                        <td>
+                          <span className={`po-status ${isLow ? "pending" : "received"}`}>
+                            {isLow ? "Low Stock" : "In Stock"}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
+    
+           <div className="user-pagination">
+              <span>
+                Showing{" "}
+                {sortedInventory.length === 0
+                  ? 0
+                  : (safeInventoryPage - 1) * inventoryPageSize + 1}
+                –
+                {Math.min(
+                  safeInventoryPage * inventoryPageSize,
+                  sortedInventory.length
+                )}{" "}
+                of {sortedInventory.length} products
+              </span>
+
+              <div className="user-pagination-buttons">
+                <button
+                  type="button"
+                  className="secondary-button"
+                  disabled={safeInventoryPage === 1}
+                  onClick={() =>
+                    setInventoryPage((page) => page - 1)
+                  }
+                >
+                  Previous
+                </button>
+
+                <span>
+                  Page {safeInventoryPage} of {totalInventoryPages}
+                </span>
+
+                <button
+                  type="button"
+                  className="secondary-button"
+                  disabled={safeInventoryPage === totalInventoryPages}
+                  onClick={() =>
+                    setInventoryPage((page) => page + 1)
+                  }
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+            
           </div>
         </>
       )}

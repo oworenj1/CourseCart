@@ -54,9 +54,30 @@ function PurchaseOrders({
           <h3>Supplier Orders</h3>
           <p>Order supplies from your registered suppliers.</p>
         </div>
-        <button type="button" className="primary-button" onClick={togglePOForm}>
+
+
+        <button
+          type="button"
+          className="primary-button"
+          onClick={() => {
+            if (showPOForm) {
+              const confirmed = window.confirm(
+                "Are you sure you want to close this purchase order form? Your unsaved changes will be lost."
+              );
+
+              if (confirmed) {
+                cancelPOForm();
+              }
+            } else {
+              togglePOForm();
+            }
+          }}
+          disabled={poSaving}
+        >
           {showPOForm ? "Close Form" : "+ Create Purchase Order"}
         </button>
+
+
       </div>
       {poSuccess && <p className="category-success">{poSuccess}</p>}
       {showPOForm && (

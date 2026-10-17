@@ -32,6 +32,18 @@ function POS({
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedDiscountType, setSelectedDiscountType] = useState("none");
 
+  // Start every new transaction with no discount after a successful sale.
+  useEffect(() => {
+    if (completedSale) {
+      setSelectedDiscountType("none");
+    }
+  }, [completedSale]);
+
+  const handleDismissReceipt = () => {
+    setSelectedDiscountType("none");
+    dismissReceipt();
+  };
+
 
   // Get the available categories from the products currently supplied to POS.
   const categories = useMemo(() => {
@@ -442,7 +454,7 @@ function POS({
             <button
               type="button"
               className="secondary-button"
-              onClick={dismissReceipt}
+              onClick={handleDismissReceipt}
             >
               Dismiss Receipt
             </button>

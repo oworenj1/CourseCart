@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 function Login({
   loginEmail,
   setLoginEmail,
@@ -7,6 +9,8 @@ function Login({
   loginLoading,
   handleLogin,
 }) {
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <main
       style={{
@@ -41,34 +45,46 @@ function Login({
         >
           <div
             style={{
-              width: 48,
-              height: 48,
-              borderRadius: 14,
+              width: 76,
+              height: 76,
+              flexShrink: 0,
               display: "grid",
               placeItems: "center",
-              background: "#2563eb",
-              color: "#fff",
-              fontSize: 24,
-              fontWeight: 800,
+              overflow: "hidden",
+              borderRadius: 20,
+              background: "#ffffff",
+              boxShadow: "0 6px 18px rgba(37, 99, 235, 0.12)",
             }}
           >
-            C
+            <img
+              src="/coursecart-logo.png"
+              alt="CourseCart Logo"
+              style={{
+                display: "block",
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                borderRadius: 20,
+              }}
+            />
           </div>
-          <div>
-            <h1 style={{ margin: 0, color: "#0f172a", fontSize: 26 }}>
+          <div style={{ flex: 1, textAlign: "center" }}>
+            <h1 style={{ margin: 0, color: "#0f172a", fontSize: 27 }}>
               CourseCart
             </h1>
             <p style={{ margin: "4px 0 0", color: "#64748b", fontSize: 13 }}>
-              School Supplies POS & Inventory
+              School Supplies POS &amp; Inventory
             </p>
           </div>
         </div>
+
         <h2 style={{ margin: "0 0 8px", color: "#0f172a", fontSize: 22 }}>
           Welcome back
         </h2>
         <p style={{ margin: "0 0 22px", color: "#64748b", fontSize: 14 }}>
           Sign in to continue to your workspace.
         </p>
+
         <form onSubmit={handleLogin} style={{ display: "grid", gap: 16 }}>
           <label
             style={{
@@ -98,6 +114,7 @@ function Login({
               }}
             />
           </label>
+
           <label
             style={{
               display: "grid",
@@ -108,24 +125,84 @@ function Login({
             }}
           >
             Password
-            <input
-              type="password"
-              autoComplete="current-password"
-              value={loginPassword}
-              onChange={(event) => setLoginPassword(event.target.value)}
-              placeholder="Enter your password"
-              required
-              style={{
-                boxSizing: "border-box",
-                width: "100%",
-                padding: "12px 13px",
-                border: "1px solid #cbd5e1",
-                borderRadius: 10,
-                fontSize: 15,
-                outlineColor: "#2563eb",
-              }}
-            />
+            <div style={{ position: "relative", width: "100%" }}>
+              <input
+                type={showPassword ? "text" : "password"}
+                autoComplete="current-password"
+                value={loginPassword}
+                onChange={(event) => setLoginPassword(event.target.value)}
+                placeholder="Enter your password"
+                required
+                style={{
+                  boxSizing: "border-box",
+                  width: "100%",
+                  padding: "12px 46px 12px 13px",
+                  border: "1px solid #cbd5e1",
+                  borderRadius: 10,
+                  fontSize: 15,
+                  outlineColor: "#2563eb",
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((visible) => !visible)}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                aria-pressed={showPassword}
+                title={showPassword ? "Hide password" : "Show password"}
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  right: 8,
+                  transform: "translateY(-50%)",
+                  display: "grid",
+                  placeItems: "center",
+                  width: 32,
+                  height: 32,
+                  padding: 0,
+                  border: 0,
+                  borderRadius: 7,
+                  background: "transparent",
+                  color: "#64748b",
+                  cursor: "pointer",
+                }}
+              >
+                {showPassword ? (
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M3 3l18 18" />
+                    <path d="M10.6 10.6a2 2 0 002.8 2.8" />
+                    <path d="M9.9 5.2A10.8 10.8 0 0112 5c5 0 8.5 4.5 9.5 7a11.8 11.8 0 01-3.1 4.3" />
+                    <path d="M6.6 6.6A12 12 0 002.5 12c1 2.5 4.5 7 9.5 7a10.5 10.5 0 004-.8" />
+                  </svg>
+                ) : (
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M2.5 12s3.5-7 9.5-7 9.5 7 9.5 7-3.5 7-9.5 7-9.5-7-9.5-7z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </label>
+
           {loginError && (
             <p
               role="alert"
@@ -141,6 +218,7 @@ function Login({
               {loginError}
             </p>
           )}
+
           <button
             type="submit"
             disabled={loginLoading}
@@ -159,6 +237,7 @@ function Login({
             {loginLoading ? "Signing in..." : "Sign In"}
           </button>
         </form>
+
         <p
           style={{
             margin: "20px 0 0",

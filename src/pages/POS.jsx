@@ -2,6 +2,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 
+// Point-of-sale interface; the usePOS hook owns cart data and checkout/API behavior.
 function POS({
   posSearch,
   setPosSearch,
@@ -27,6 +28,7 @@ function POS({
   completedSale,
   dismissReceipt,
 }) {
+  // Local UI state controls product browsing and the discount option selected on this screen.
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [productsPerPage, setProductsPerPage] = useState(6);
   const [currentPage, setCurrentPage] = useState(1);
@@ -95,6 +97,7 @@ function POS({
   }, [currentPage, totalPages]);
 
   
+  // Convert the selected discount rule into a capped amount based on the current subtotal.
   const discountAmount = useMemo(() => {
     const subtotal = Math.max(0, Number(cartSubtotal) || 0);
 
@@ -123,6 +126,7 @@ function POS({
 
   return (
     <section className="pos-layout">
+      {/* Staff choose products on the left; the active sale and payment form stay on the right. */}
       <div className="pos-products-panel">
         <div className="panel-heading">
           <div>

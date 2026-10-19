@@ -29,6 +29,7 @@ export function useUsers({ authUser, module }) {
   const [editingUserId, setEditingUserId] = useState(null);
   const [userForm, setUserForm] = useState(emptyUserForm);
 
+  // Only Admins load accounts; the selected view controls the active/archive query and list.
   useEffect(() => {
     if (module !== "users" || authUser?.role !== "admin") return;
 
@@ -69,6 +70,7 @@ export function useUsers({ authUser, module }) {
 
   const openEditUser = (user) => {
     const targetId = user.id || user._id;
+    // Prevent self-editing before opening the form, including changing one's own role.
     if (targetId === authUser?.id) {
       setUsersError(
         "You cannot edit your own Admin account. Ask another Admin to manage it, or have another Admin deactivate it and create a replacement account if needed.",
@@ -93,6 +95,7 @@ export function useUsers({ authUser, module }) {
     event.preventDefault();
     setUsersError("");
     setUsersSuccess("");
+    // Check required details and password length before making a create/update request.
     if (
       !userForm.firstName.trim() ||
       !userForm.lastName.trim() ||
@@ -121,6 +124,7 @@ export function useUsers({ authUser, module }) {
       };
       if (userForm.password) payload.password = userForm.password;
 
+      // Use the matching service operation, then insert or replace that account in state.
       const result = editingUserId
         ? await updateUser(editingUserId, payload)
         : await createUser({ ...payload, password: userForm.password });

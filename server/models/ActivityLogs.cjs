@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
 
+
+// Define the schema for the ActivityLog model
 const activityLogSchema = new mongoose.Schema(
   {
+
+    // Reference to the user who performed the action
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Account",

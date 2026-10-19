@@ -1,6 +1,7 @@
 import { API_BASE_URL } from "./api";
 import { getStoredToken } from "./authService";
 
+// Activity history is protected, so include the session token and return only the logs array.
 export const getActivityLogs = async (limit = 250) => {
   const token = getStoredToken();
   const response = await fetch(`${API_BASE_URL}/activity-logs?limit=${limit}`, {

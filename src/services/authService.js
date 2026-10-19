@@ -3,6 +3,7 @@ import { API_BASE_URL } from "./api";
 const TOKEN_KEY = "coursecart_token";
 const USER_KEY = "coursecart_user";
 
+// These helpers keep browser session storage in one place for the auth hook.
 export const getStoredToken = () => localStorage.getItem(TOKEN_KEY);
 
 export const storeSession = (token, user) => {
@@ -39,7 +40,7 @@ export const fetchCurrentUser = async (token) => {
   return result.user;
 };
 
-// Sends the login form to the backend and returns { token, user }.
+// Sends the login form to the backend and returns { token, user } for useAuth to save.
 export const loginRequest = async (email, password) => {
   const response = await fetch(`${API_BASE_URL}/auth/login`, {
     method: "POST",

@@ -1,4 +1,4 @@
-// Print-only CSS used by the Reports screen (kept exactly as it was in App.jsx).
+// Print-only CSS hides controls and lays out report tables for a clean paper copy.
 export const reportPrintStyles = `@media print {
 body { background: #fff !important; }
 .topbar, .view-tabs, .page-heading, .footer, .reports-print-area button,

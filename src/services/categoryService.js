@@ -2,6 +2,7 @@ import { apiRequest } from "./api";
 
 const API_URL = "/categories";
 
+// These wrappers keep endpoint details out of the category hook.
 export const getCategories = async () => {
   return apiRequest(API_URL);
 };

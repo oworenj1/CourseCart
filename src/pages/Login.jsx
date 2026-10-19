@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+// Login form UI; authentication and saved-session work are handled by useAuth in App.
 function Login({
   loginEmail,
   setLoginEmail,
@@ -9,6 +10,7 @@ function Login({
   loginLoading,
   handleLogin,
 }) {
+  // This local toggle changes only whether the password characters are visible.
   const [showPassword, setShowPassword] = useState(false);
 
   return (

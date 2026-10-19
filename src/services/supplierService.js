@@ -2,6 +2,7 @@ import { apiRequest } from "./api";
 
 const API_URL = "/suppliers";
 
+// Supplier CRUD and archive actions use the shared authenticated API helper.
 export const getSuppliers = async () => {
   return apiRequest(API_URL);
 };

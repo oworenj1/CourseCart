@@ -1,6 +1,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 
+// Product fields are controlled by the products hook; this component handles form interaction.
 function ProductForm({
   productForm,
   setProductForm,
@@ -15,6 +16,7 @@ function ProductForm({
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const categoryRef = useRef(null);
 
+  // Only active categories can be assigned to a new or edited product.
   const activeCategories = useMemo(() => {
     return (categories || [])
       .filter((category) => !category.isArchived)
@@ -35,6 +37,7 @@ function ProductForm({
     );
   }, [activeCategories, categorySearch]);
 
+  // Close suggestions when a click happens outside the category selector.
   useEffect(() => {
     function handleOutsideClick(event) {
       if (
@@ -53,6 +56,7 @@ function ProductForm({
     };
   }, []);
 
+  // Save a chosen category in the parent form state, then close the suggestion list.
   function selectCategory(categoryName) {
     setProductForm((previous) => ({
       ...previous,
@@ -100,6 +104,7 @@ function ProductForm({
           />
         </label>
 
+        {/* Searchable category list gives the form valid active category values. */}
         <div className="product-category-field" ref={categoryRef}>
           <label htmlFor="product-category-search">
             Category
@@ -231,6 +236,7 @@ function ProductForm({
           )}
         </div>
 
+        {/* Inventory is intentionally read-only here; stock changes use receiving/sales flows. */}
         <label>
           Selling price (₱)
           <input

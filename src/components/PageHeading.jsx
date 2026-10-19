@@ -1,4 +1,4 @@
-// The title area above the tabs: screen title, short description, and item count.
+// Displays metadata prepared by getPageHeading: title, description, and a live item count.
 function PageHeading({ title, subtitle, countLabel, count }) {
   return (
     <div className="page-heading">

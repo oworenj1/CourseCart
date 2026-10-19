@@ -12,6 +12,7 @@ import {
   History,
 } from "lucide-react";
 
+// Each role gets only the modules listed here; backend permissions still enforce access.
 // Role-based sidebar navigation. Keep these permissions aligned with backend access rules.
 const TABS_BY_ROLE = {
   admin: [
@@ -67,10 +68,12 @@ const TAB_ICONS = {
 };
 
 function NavTabs({ role, module, onSelect }) {
+  // Unknown roles use the inventory navigation list as the current UI fallback.
   const tabs = TABS_BY_ROLE[role === "admin" || role === "cashier" ? role : "inventory"];
 
   return (
     <nav className="view-tabs sidebar-nav" aria-label="Main navigation">
+      {/* The active module is highlighted, and clicking a tab asks App to switch screens. */}
       {tabs.map((item) => (
         <button
           key={item}

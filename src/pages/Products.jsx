@@ -27,6 +27,20 @@ function Products({
   handleArchiveProduct,
   handleRestoreProduct,
 }) {
+  // Normalize role labels before deciding whether to show inventory management actions.
+  // Normalize role values so "Inventory Staff", "inventory_staff", and
+  // "inventory-staff" are handled consistently.
+  const normalizedRole = String(authUser?.role || "")
+    .trim()
+    .toLowerCase()
+    .replace(/[_-]+/g, " ")
+    .replace(/\s+/g, " ");
+
+  const canManageProducts =
+    normalizedRole === "admin" ||
+    normalizedRole === "inventory staff" ||
+    normalizedRole === "inventory";
+
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [stockFilter, setStockFilter] = useState("all");
   const [productsPerPage, setProductsPerPage] = useState(10);
@@ -43,6 +57,7 @@ function Products({
       .sort((a, b) => a.localeCompare(b));
   }, [categories]);
 
+  // Apply category/stock filters to the already searched active or archived products.
   const displayedProducts = useMemo(() => {
     let result = filteredProducts || [];
 
@@ -124,23 +139,21 @@ function Products({
           <h3>Products</h3>
           <p>Manage school supplies and stock.</p>
         </div>
-
-        
-          {productView === "active" && (
-            <button
-              type="button"
-              className="primary-button"
-              onClick={openAddProduct}
-              disabled={showProductForm}
-              title={
-                showProductForm
-                  ? "Finish or cancel the current product form first."
-                  : "Add a new product"
-              }
-            >
-              {showProductForm ? "Product Form Open" : "+ Add Product"}
-            </button>
-          )}
+        {canManageProducts && productView === "active" && (
+          <button
+            type="button"
+            className="primary-button"
+            onClick={openAddProduct}
+            disabled={showProductForm}
+            title={
+              showProductForm
+                ? "Finish or cancel the current product form first."
+                : "Add a new product"
+            }
+          >
+            {showProductForm ? "Product Form Open" : "+ Add Product"}
+          </button>
+        )}
 
       </div>
 
@@ -148,7 +161,7 @@ function Products({
         <p className="success-message">{productSuccess}</p>
       )}
 
-      {showProductForm && productView === "active" && (
+      {canManageProducts && showProductForm && productView === "active" && (
         <ProductForm
           productForm={productForm}
           setProductForm={setProductForm}
@@ -161,6 +174,7 @@ function Products({
         />
       )}
 
+      {/* Search and dropdown filters refine the set shown in the cards below. */}
       <div className="product-filter-panel">
         <label className="product-filter-field product-search-field">
           <span>Search products</span>
@@ -260,6 +274,7 @@ function Products({
             <p className="feedback">No products match your filters.</p>
           ) : (
             <>
+              {/* The card badge and action buttons reflect stock status, role, and archive view. */}
               <div className="product-grid">
                 {paginatedProducts.map((p) => (
                   <article className="product-card" key={p._id}>
@@ -307,9 +322,8 @@ function Products({
                       </div>
                     </div>
 
-                    
                     <div className="product-actions">
-                      {authUser?.role === "admin" && (
+                      {canManageProducts && (
                         productView === "active" ? (
                           <>
                             <button

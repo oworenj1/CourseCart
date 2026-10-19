@@ -23,6 +23,7 @@ export function useCategories({ authUser, module }) {
   const [categoryError, setCategoryError] = useState("");
   const [categorySuccess, setCategorySuccess] = useState("");
 
+  // Load active or archived records only while the Categories module is open.
   useEffect(() => {
     if (!authUser || module !== "categories") return;
 
@@ -53,6 +54,7 @@ export function useCategories({ authUser, module }) {
     };
   }, [module, categoryView, authUser]);
 
+  // The view tab chooses the source list; search narrows that list for display.
   const displayedCategories =
     categoryView === "active" ? categories : archivedCategories;
   const filteredCategories = displayedCategories.filter((c) =>
@@ -66,6 +68,7 @@ export function useCategories({ authUser, module }) {
     e.preventDefault();
     setCategoryError("");
     setCategorySuccess("");
+    // Validate locally first so incomplete or duplicate names are not sent to the API.
     if (!categoryName.trim()) {
       setCategoryError("Category name is required.");
       return;
@@ -84,6 +87,7 @@ export function useCategories({ authUser, module }) {
       );
       return;
     }
+    // Use the same form for create and edit, then update local state from the server response.
     setCategorySaving(true);
     try {
       const payload = {

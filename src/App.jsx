@@ -1,3 +1,4 @@
+// App coordinates authentication, navigation, screen data, and the shared page layout.
 import { useEffect, useState } from "react";
 
 import Header from "./components/Header";
@@ -93,6 +94,7 @@ function App() {
     };
   }, [expireSession, resetSale]);
 
+  // Wait for the saved login check before choosing between the login and app screens.
   if (auth.authChecking) {
     return (
       <main
@@ -108,6 +110,7 @@ function App() {
     );
   }
 
+  // No private workspace screens are rendered until a user has signed in.
   if (!authUser) {
     return (
       <Login
@@ -122,6 +125,7 @@ function App() {
     );
   }
 
+  // The heading helper turns the selected module and its current totals into display text.
   const heading = getPageHeading(
     module,
     {
@@ -157,15 +161,17 @@ function App() {
           <PageHeading {...heading} />
           <section className="inventory-panel">
 
+          {/* Admin-only pages are gated here as well as in their data-loading hooks. */}
           {module === "users" && authUser.role === "admin" && (
             <UserManagement authUser={authUser} {...users} />
           )}
           {module === "activity-logs" && authUser.role === "admin" && (
             <ActivityLogs
               {...activityLogs}
-              onRefresh={() => setModule("activity-logs")}
+              onRefresh={activityLogs.refreshActivityLogs}
             />
           )}
+          {/* Show only the component for the selected module and pass it the needed data/actions. */}
           {module === "dashboard" && (
             <Dashboard
               authUser={authUser}

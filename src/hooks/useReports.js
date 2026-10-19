@@ -11,6 +11,7 @@ export function useReports({ authUser, module }) {
   const [salesLoading, setSalesLoading] = useState(false);
   const [salesError, setSalesError] = useState("");
 
+  // Reports combine transactions and current products, so request both data sets together.
   useEffect(() => {
     if (!authUser || module !== "reports") return;
 

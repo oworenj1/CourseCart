@@ -1,3 +1,4 @@
+// Controlled supplier form; useSuppliers owns the values and save/cancel behavior.
 function SupplierForm({
   editingSupplier,
   supplierForm,
@@ -17,6 +18,7 @@ function SupplierForm({
             : "Enter the supplier's contact details."}
         </p>
       </div>
+      {/* Each input is tied to the matching property in supplierForm by its name. */}
       <div className="form-grid">
         <label>
           Supplier name

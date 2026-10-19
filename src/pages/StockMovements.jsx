@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 
 const PAGE_SIZE_OPTIONS = [10, 25, 50];
 
+// Read-only stock audit screen with search, movement/date filters, and pagination.
 function StockMovements({
   stockMovements = [],
   movementLoading,
@@ -22,6 +23,7 @@ function StockMovements({
   const getMovementType = (movement) =>
     String(movement.movementType || "unknown").toLowerCase().replace(/\s+/g, "_");
 
+  // Filter by the displayed text and date range, then show the newest movement first.
   const filteredMovements = useMemo(() => {
     const query = search.trim().toLowerCase();
     return stockMovements.filter((movement) => {
@@ -118,6 +120,7 @@ function StockMovements({
       {!movementLoading && !movementError && (
         <>
           <div className="po-table-wrapper">
+            {/* The table compares before/after stock and identifies who recorded each change. */}
             <table className="po-table">
               <thead>
                 <tr>

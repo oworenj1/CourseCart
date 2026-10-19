@@ -31,6 +31,7 @@ export function useProducts({ authUser, module }) {
   const [productSuccess, setProductSuccess] = useState("");
   const [categories, setCategories] = useState([]);
 
+  // Products need both the selected inventory list and active categories for the form.
   useEffect(() => {
     if (!authUser || module !== "products") return;
 
@@ -64,6 +65,7 @@ export function useProducts({ authUser, module }) {
     };
   }, [module, productView, authUser]);
 
+  // Search applies to the currently selected active/archive list.
   const displayedProducts =
     productView === "active" ? products : archivedProducts;
   const filteredProducts = displayedProducts.filter((p) =>
@@ -90,6 +92,7 @@ export function useProducts({ authUser, module }) {
     e.preventDefault();
     setProductError("");
     setProductSuccess("");
+    // Check required values, uniqueness, active category, price, and stock before saving.
     if (!productForm.name.trim() || !productForm.category.trim()) {
       setProductError("Product name and category are required.");
       return;
@@ -136,6 +139,7 @@ export function useProducts({ authUser, module }) {
       setProductError("Stock must be a non-negative whole number.");
       return;
     }
+    // Send normalized values to the service, then reflect the saved record in the list.
     setProductSaving(true);
     try {
       const payload = {

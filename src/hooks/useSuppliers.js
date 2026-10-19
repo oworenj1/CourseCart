@@ -30,6 +30,7 @@ export function useSuppliers({ authUser, module }) {
   const [supplierError, setSupplierError] = useState("");
   const [supplierSuccess, setSupplierSuccess] = useState("");
 
+  // Load the active or archived supplier list when this screen or its view changes.
   useEffect(() => {
     if (!authUser || module !== "suppliers") return;
 
@@ -60,6 +61,7 @@ export function useSuppliers({ authUser, module }) {
     };
   }, [module, supplierView, authUser]);
 
+  // Search all supplier contact fields so users can find an account by any saved detail.
   const displayedSuppliers =
     supplierView === "active" ? suppliers : archivedSuppliers;
   const filteredSuppliers = displayedSuppliers.filter((s) =>
@@ -79,6 +81,7 @@ export function useSuppliers({ authUser, module }) {
     e.preventDefault();
     setSupplierError("");
     setSupplierSuccess("");
+    // Require a name and prevent duplicates across both active and archived records.
     if (!supplierForm.name.trim()) {
       setSupplierError("Supplier name is required.");
       return;
@@ -97,6 +100,7 @@ export function useSuppliers({ authUser, module }) {
       );
       return;
     }
+    // Send trimmed form values, then update the visible list from the backend response.
     setSupplierSaving(true);
     try {
       const payload = {

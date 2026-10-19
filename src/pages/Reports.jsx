@@ -7,6 +7,7 @@ import { useState } from "react";
 import { DEFAULT_REORDER_LEVEL, isLowStock } from "../utils/stock";
 
 
+// Reports screen combines pre-calculated sales metrics with paginated inventory tables.
 function Reports({
   sales,
   products,
@@ -21,6 +22,7 @@ function Reports({
 }) {
 
   
+  // Keep calculations in a shared utility so the screen and PDF use matching totals.
   const report = buildSalesReport({
     sales,
     products,
@@ -77,6 +79,7 @@ function Reports({
     safeBestSellingPage * bestSellingPageSize
   );
 
+  // Confirm and export the same report object currently shown on screen.
   const handleExportPdf = () => {
     if (reportStartDate && reportEndDate && reportStartDate > reportEndDate) {
       window.alert("The start date must be on or before the end date.");
@@ -183,6 +186,7 @@ function Reports({
               <small>Total discounts applied</small>
             </article>
           </div>
+          {/* Best sellers reflect the selected sales dates; inventory below is current stock. */}
           <div className="receiving-panel" style={{ marginTop: 20 }}>
             <div className="panel-heading">
               <div>

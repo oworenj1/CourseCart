@@ -8,6 +8,7 @@ export function useActivityLogs({ authUser, module }) {
   const [activityLogsError, setActivityLogsError] = useState("");
   const [activityLogsSearch, setActivityLogsSearch] = useState("");
 
+  // Load the protected audit list only when an Admin opens this module.
   useEffect(() => {
     if (module !== "activity-logs" || authUser?.role !== "admin") return;
 
@@ -33,6 +34,7 @@ export function useActivityLogs({ authUser, module }) {
     };
   }, [module, authUser]);
 
+  // Match the search text against the action, record, detail, and account fields.
   const filteredActivityLogs = activityLogs.filter((log) => {
     const user = log.user || {};
     const userName = [user.firstName, user.lastName, user.email, user.role]

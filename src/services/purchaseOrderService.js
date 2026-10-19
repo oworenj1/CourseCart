@@ -3,6 +3,7 @@ import { apiRequest } from "./api";
 
 const API_URL = "/purchase-orders";
 
+// The service unwraps common response shapes so the hook can work with order records directly.
 export const getPurchaseOrders = async () => {
   const data = await apiRequest(API_URL);
 

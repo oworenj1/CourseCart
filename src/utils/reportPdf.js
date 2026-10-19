@@ -1,3 +1,4 @@
+// PDF export uses the same report totals and stock rules shown on the Reports screen.
 import { jsPDF } from "jspdf";
 import { formatAmount } from "./formatters";
 import { isLowStock } from "./stock";

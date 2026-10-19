@@ -1,3 +1,4 @@
+// Pure calculation helpers keep report totals consistent across the screen and PDF.
 import { isLowStock } from "./stock";
 
 // Works out the product name shown for one line item of a sale.

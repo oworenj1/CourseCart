@@ -1,3 +1,4 @@
+// Controlled category form: values and submit/cancel actions come from useCategories.
 function CategoryForm({
   editingCategory,
   categoryName,
@@ -11,6 +12,7 @@ function CategoryForm({
 }) {
   return (
     <form className="category-form" onSubmit={onSubmit}>
+      {/* The same fields are reused for creating and editing a category. */}
       <div className="form-heading">
         <h3>{editingCategory ? "Edit Category" : "Add Category"}</h3>
         <p>

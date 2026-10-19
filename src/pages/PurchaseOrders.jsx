@@ -3,6 +3,7 @@ import PurchaseOrderForm from "../components/PurchaseOrderForm";
 import ReceiveStockPanel from "../components/ReceiveStockPanel";
 import { formatAmount } from "../utils/formatters";
 
+// Purchase order workspace: create orders, filter history, and expand a receiving panel.
 function PurchaseOrders({
   poSuccess,
   showPOForm,
@@ -80,6 +81,7 @@ function PurchaseOrders({
 
       </div>
       {poSuccess && <p className="category-success">{poSuccess}</p>}
+      {/* Form inputs are controlled by usePurchaseOrders; submit sends the complete order. */}
       {showPOForm && (
         <PurchaseOrderForm
           poSuppliers={poSuppliers}
@@ -189,6 +191,7 @@ function PurchaseOrders({
               Clear Filters
             </button>
           </div>
+          {/* Each table row summarizes an order; its expanded row contains the receiving form. */}
           <div className="po-table-wrapper">
             <table className="po-table">
               <thead>

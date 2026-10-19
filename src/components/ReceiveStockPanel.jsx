@@ -1,3 +1,4 @@
+// Shows receiving progress for an order and sends each submitted line to usePurchaseOrders.
 function ReceiveStockPanel({
   order,
   receivingError,
@@ -17,6 +18,7 @@ function ReceiveStockPanel({
       {receivingSuccess && (
         <p className="category-success">{receivingSuccess}</p>
       )}
+      {/* Calculate remaining units so the user can only enter a quantity still due. */}
       {(order.items || []).map((item, index) => {
         const ordered = Number(item.quantityOrdered || 0);
         const received = Number(item.quantityReceived || 0);

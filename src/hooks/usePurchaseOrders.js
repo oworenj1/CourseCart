@@ -35,6 +35,7 @@ export function usePurchaseOrders({ authUser, module }) {
   // Use the signed-in account for purchase orders, receiving, and checkout.
   const ORDERED_BY_ID = authUser?.id || "";
 
+  // Fetch orders and their supplier/product choices together when the screen opens.
   useEffect(() => {
     if (!authUser || module !== "purchase-orders") return;
 
@@ -94,6 +95,7 @@ export function usePurchaseOrders({ authUser, module }) {
     0,
   );
 
+  // Apply free-text, status, and date filters before splitting the list into pages.
   const filteredPurchaseOrders = purchaseOrders.filter((order) => {
     const supplierId =
       typeof order.supplier === "object" ? order.supplier?._id : order.supplier;
@@ -130,6 +132,7 @@ export function usePurchaseOrders({ authUser, module }) {
     e.preventDefault();
     setPoError("");
     setPoSuccess("");
+    // Check the supplier and every line before sending the order to the backend.
     if (!poSupplier) return setPoError("Please select a supplier.");
     const validItems = poItems.every(
       (item) =>
@@ -162,7 +165,7 @@ export function usePurchaseOrders({ authUser, module }) {
       });
       setPurchaseOrders((old) => [created, ...old]);
       setPoSupplier("");
-      setPoItems([{ product: "", quantityOrdered: "1", unitCost: "" }]);
+      setPoItems([{ product: "", quantityOrdered: "", unitCost: "" }]);
       setShowPOForm(false);
       setPoSuccess("Purchase order created successfully.");
     } catch (err) {
@@ -179,6 +182,7 @@ export function usePurchaseOrders({ authUser, module }) {
       return;
     }
 
+    // Validate the entered amount against what remains on this specific order line.
     const inputKey = `${order._id}-${itemIndex}`;
 
     const quantity = Number(receivingQuantities[inputKey]);
@@ -215,6 +219,7 @@ export function usePurchaseOrders({ authUser, module }) {
           : `receipt-${Date.now()}-${Math.random().toString(36).slice(2)}`;
       localStorage.setItem(requestStorageKey, receiptRequestId);
     }
+    // After confirmation, replace the order/products with server data so inventory stays in sync.
     try {
       const result = await receiveStock(order._id, {
         itemIndex,
@@ -252,15 +257,31 @@ export function usePurchaseOrders({ authUser, module }) {
     }
   };
 
+
   const togglePOForm = () => {
-    setPoError("");
+    if (showPOForm) {
+      cancelPOForm();
+      return;
+    }
+
+    resetPOForm();
     setPoSuccess("");
-    setShowPOForm((old) => !old);
+    setShowPOForm(true);
+  };
+
+
+
+  const resetPOForm = () => {
+    setPoSupplier("");
+    setPoItems([
+      { product: "", quantityOrdered: "", unitCost: "" },
+    ]);
+    setPoError("");
   };
 
   const cancelPOForm = () => {
+    resetPOForm();
     setShowPOForm(false);
-    setPoError("");
   };
 
   const clearPoFilters = () => {

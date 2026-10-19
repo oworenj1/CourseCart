@@ -1,5 +1,6 @@
 import { getSaleItemName } from "../utils/reportCalculations";
 
+// Read-only transaction detail panel; item rows come from the selected saved sale.
 function SaleDetails({ selectedSale, onClose }) {
   return (
     <div
@@ -28,6 +29,7 @@ function SaleDetails({ selectedSale, onClose }) {
               <th>Line Total</th>
             </tr>
           </thead>
+          {/* Use the sale's saved line totals, with a price-times-quantity fallback. */}
           <tbody>
             {(selectedSale.items || []).map((item, index) => {
               const productName = getSaleItemName(item);

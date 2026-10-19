@@ -2,6 +2,8 @@
 const jwt = require("jsonwebtoken");
 const Account = require("../models/Accounts.cjs");
 
+
+// Middleware to protect routes and ensure the user is authenticated
 const protect = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;

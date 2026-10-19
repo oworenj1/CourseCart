@@ -18,7 +18,7 @@ export function useAuth() {
   const [loginLoading, setLoginLoading] = useState(false);
   const [loginError, setLoginError] = useState("");
 
-  // When the app opens, check that any saved login is still valid.
+  // When the app opens, check that any saved login is still valid before showing private pages.
   useEffect(() => {
     let cancelled = false;
 
@@ -63,6 +63,7 @@ export function useAuth() {
     event.preventDefault();
     setLoginError("");
 
+    // Trim and normalize the email before asking the backend to authenticate it.
     const email = loginEmail.trim().toLowerCase();
 
     if (!email || !loginPassword) {
@@ -72,6 +73,7 @@ export function useAuth() {
 
     setLoginLoading(true);
 
+    // Save the returned session and user so later API requests can use this login.
     try {
       const result = await loginRequest(email, loginPassword);
 

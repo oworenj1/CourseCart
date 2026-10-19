@@ -1,5 +1,6 @@
 import { isLowStock } from "../utils/stock";
 
+// Presents role-appropriate totals and shortcuts using data loaded by useDashboard.
 function Dashboard({
   authUser,
   dashboardError,
@@ -32,6 +33,7 @@ function Dashboard({
         <p className="feedback">Loading dashboard...</p>
       ) : (
         <>
+          {/* Some totals are hidden from roles that do not use those modules. */}
           <div className="dashboard-stat-grid">
             <article className="dashboard-stat-card">
               <span>Products</span>

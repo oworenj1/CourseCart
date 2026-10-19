@@ -1,4 +1,5 @@
 
+// Keep page labels separate from JSX so each module uses consistent heading text.
 const TITLES = {
   dashboard: () => "Dashboard",
   "activity-logs": () => "Activity Logs",
@@ -44,6 +45,7 @@ const COUNT_LABELS = {
   pos: "Products",
 };
 
+// Select the title, subtitle, and count label/value for the currently open module.
 export const getPageHeading = (module, views, counts) => ({
   title: (TITLES[module] || (() => "Dashboard"))(views),
   subtitle: SUBTITLES[module] || "Welcome to your CourseCart workspace.",

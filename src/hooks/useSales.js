@@ -9,6 +9,7 @@ export function useSales({ authUser, module }) {
   const [salesSearch, setSalesSearch] = useState("");
   const [selectedSale, setSelectedSale] = useState(null);
 
+  // Load transaction history only when its screen is selected and a user is signed in.
   useEffect(() => {
     if (!authUser || module !== "sales") return;
 

@@ -1,8 +1,11 @@
 
 const mongoose = require("mongoose");
 
+
+// Define the schema for the Account model
 const accountSchema = new mongoose.Schema(
   {
+    // Personal information fields
     firstName: {
       type: String,
       required: true,

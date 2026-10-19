@@ -4,12 +4,14 @@ import UserForm from "../components/UserForm";
 
 const PAGE_SIZE_OPTIONS = [10, 25, 50];
 
+// Admin-only account list with filters, role/status actions, and a shared create/edit form.
 function UserManagement({
   authUser, usersView, changeUsersView, usersSuccess, showUserForm,
   editingUserId, userForm, setUserForm, usersError, usersSaving, saveUser,
   cancelUserForm, toggleUserForm, usersSearch, setUsersSearch, usersLoading,
   displayedUsers, openEditUser, toggleUserStatus, archiveOrRestoreUser,
 }) {
+  // Screen-level filters narrow the accounts supplied by useUsers before pagination.
   const [roleFilter, setRoleFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [fromDate, setFromDate] = useState("");
@@ -17,6 +19,7 @@ function UserManagement({
   const [pageSize, setPageSize] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
 
+  // Match role, active/archived status, and account creation date.
   const filteredUsers = useMemo(() => {
     return displayedUsers.filter((user) => {
       const roleMatches = roleFilter === "all" || user.role === roleFilter;
@@ -152,6 +155,7 @@ function UserManagement({
             Clear Filters
           </button>
         </div>
+        {/* Actions are disabled for the signed-in Admin's own account. */}
         <div className="po-table-wrapper">
           <table className="po-table">
             <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>

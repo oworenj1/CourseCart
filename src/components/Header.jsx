@@ -1,9 +1,11 @@
 import { useState } from "react";
 import NavTabs from "./NavTabs";
 
+// Shared sidebar: shows the signed-in account, role-filtered navigation, and logout.
 function Header({ authUser, onLogout, role, module, onSelect }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
+  // On smaller screens, close the drawer after the user chooses a destination.
   const handleSelect = (nextModule) => {
     onSelect(nextModule);
     setMobileOpen(false);

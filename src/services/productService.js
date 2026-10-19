@@ -3,6 +3,7 @@ import { apiRequest } from "./api";
 
 const API_URL = "/products";
 
+// Product create/update/archive/restore calls share the API helper and return the saved record.
 export const getProducts = async () => {
   return apiRequest(API_URL);
 };

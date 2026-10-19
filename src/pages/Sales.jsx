@@ -5,6 +5,7 @@ import { formatAmount } from "../utils/formatters";
 const PAGE_SIZE_OPTIONS = [10, 25, 50];
 
 
+// Convert the saved cashier shape into a readable label for transaction rows.
 function getCashierName(sale) {
   const cashier = sale.cashier;
 
@@ -55,6 +56,7 @@ function Sales({
   selectedSale,
   setSelectedSale,
 }) {
+  // These controls filter the sales already loaded by useSales.
   const [paymentFilter, setPaymentFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [startDate, setStartDate] = useState("");
@@ -69,6 +71,7 @@ function Sales({
     sales.map((sale) => normalize(sale.status || "completed")).filter(Boolean),
   )).sort(), [sales]);
 
+  // Search transaction and item details, apply filters, and sort newest sale first.
   const filteredSales = useMemo(() => {
     const query = String(salesSearch || "").trim().toLowerCase();
     return sales.filter((sale) => {
@@ -171,6 +174,7 @@ function Sales({
       {!salesLoading && !salesError && (
         <>
           <div className="po-table-wrapper">
+            {/* Selecting View stores a sale in state so SaleDetails can display its line items. */}
             <table className="po-table">
               <thead>
                 <tr>

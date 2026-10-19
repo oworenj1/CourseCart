@@ -3,6 +3,7 @@ import { getStoredToken } from "./authService";
 
 // Shared request helper for the User Management endpoints.
 const userRequest = async (path, options = {}) => {
+  // User endpoints add the saved session token because they use direct fetch calls.
   const token = getStoredToken();
   const response = await fetch(`${API_BASE_URL}${path}`, {
     ...options,
@@ -21,6 +22,7 @@ const userRequest = async (path, options = {}) => {
   return result;
 };
 
+// Load active accounts by default; the optional query asks the backend for archived ones too.
 export const getUsers = async (includeArchived = false) => {
   const token = getStoredToken();
   const response = await fetch(
@@ -36,6 +38,7 @@ export const getUsers = async (includeArchived = false) => {
   return Array.isArray(result.users) ? result.users : [];
 };
 
+// Account changes are sent as JSON, with the response and errors passed back to useUsers.
 export const createUser = (payload) =>
   userRequest("/users", { method: "POST", body: JSON.stringify(payload) });
 

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import SubTabs from "../components/SubTabs";
 import SupplierForm from "../components/SupplierForm";
 
+// Supplier management mirrors category management, with contact fields shown on each card.
 function Suppliers({
   supplierView,
   changeSupplierView,
@@ -24,6 +25,7 @@ function Suppliers({
   handleArchiveSupplier,
   handleRestoreSupplier,
 }) {
+  // Keep pagination local to this screen; the hook owns and filters the supplier records.
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
@@ -39,6 +41,7 @@ function Suppliers({
     safeCurrentPage * pageSize
   );
 
+  // Return to the first page when search, view, or page size changes the result list.
   useEffect(() => {
     setCurrentPage(1);
   }, [supplierSearch, supplierView, pageSize]);
@@ -154,6 +157,7 @@ function Suppliers({
             <p className="feedback">No suppliers found.</p>
           ) : (
             <>
+              {/* Each card shows saved contact details and active/archive actions. */}
               <div className="category-grid">
                 {paginatedSuppliers.map((s) => (
                   <article className="category-card" key={s._id}>

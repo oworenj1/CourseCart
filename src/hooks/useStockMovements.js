@@ -8,6 +8,7 @@ export function useStockMovements({ authUser, module }) {
   const [movementError, setMovementError] = useState("");
   const [movementSearch, setMovementSearch] = useState("");
 
+  // Movement records are loaded only while their history screen is open.
   useEffect(() => {
     if (!authUser || module !== "stock-movements") return;
 

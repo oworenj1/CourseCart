@@ -17,6 +17,7 @@ export function useDashboard({ authUser, module }) {
   const [stockMovements, setStockMovements] = useState([]);
   const [sales, setSales] = useState([]);
 
+  // Fetch only the dashboard data this signed-in role is allowed to use.
   useEffect(() => {
     if (!authUser || module !== "dashboard") return;
 
@@ -37,6 +38,7 @@ export function useDashboard({ authUser, module }) {
           );
         }
         if (role === "admin" || role === "cashier") tasks.push(getSales());
+        // Run independent requests together, then map each result back to its state.
         const results = await Promise.all(tasks);
         if (!cancelled) {
           setProducts(Array.isArray(results[0]) ? results[0] : []);

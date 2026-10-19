@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+// Convert the input's YYYY-MM-DD value to readable text without shifting its calendar day.
 function formatDateForDisplay(value) {
   if (!value) return "";
   const [year, month, day] = value.split("-").map(Number);
@@ -10,6 +11,7 @@ function formatDateForDisplay(value) {
 }
 
 function ReportDatePicker({ label, value, onChange, min }) {
+  // Local picker state controls the open calendar and the month currently being viewed.
   const [open, setOpen] = useState(false);
   const initial = value ? new Date(`${value}T12:00:00`) : new Date();
   const [viewYear, setViewYear] = useState(initial.getFullYear());
@@ -25,6 +27,7 @@ function ReportDatePicker({ label, value, onChange, min }) {
     }
   }, [value]);
 
+  // These values determine the weekday offset and number of day buttons to render.
   const monthStart = new Date(viewYear, viewMonth, 1);
   const firstDay = monthStart.getDay();
   const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
@@ -42,6 +45,7 @@ function ReportDatePicker({ label, value, onChange, min }) {
     setViewMonth(next.getMonth());
   };
 
+  // Send the selected day back in the format expected by the report date filters.
   const chooseDay = (day) => {
     const picked = new Date(viewYear, viewMonth, day);
     if (minDate && picked < minDate) return;
@@ -74,6 +78,7 @@ function ReportDatePicker({ label, value, onChange, min }) {
           {value ? formatDateForDisplay(value) : "Select month, day, and year"}
         </div>
       </div>
+      {/* The popover renders weekday headings, valid days, and month navigation. */}
       {open && (
         <div className="report-calendar-popover">
           <div className="report-calendar-heading">

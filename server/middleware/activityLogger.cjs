@@ -1,5 +1,7 @@
 const ActivityLog = require("../models/ActivityLogs.cjs");
 
+
+// Map API path prefixes to entity types for activity logging
 const PATH_ENTITY_MAP = [
   ["/api/users", "account"],
   ["/api/products", "product"],
@@ -10,11 +12,14 @@ const PATH_ENTITY_MAP = [
   ["/api/stock-movements", "stockMovement"],
 ];
 
+
+// Helper functions to determine entity type, action, and entity ID for activity logging
 function getEntityType(path) {
   const entry = PATH_ENTITY_MAP.find(([prefix]) => path.startsWith(prefix));
   return entry ? entry[1] : "system";
 }
 
+// Determine the action based on HTTP method and path
 function getAction(method, path) {
   const segments = path.split("?")[0].split("/").filter(Boolean);
   const last = segments[segments.length - 1] || "system";

@@ -1,6 +1,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 
+// Admin audit history screen: search and filter recorded actions, then show them in pages.
 function ActivityLogs({
   activityLogsSearch,
   setActivityLogsSearch,
@@ -17,6 +18,7 @@ function ActivityLogs({
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
+  // Build dropdown choices from the records returned by the activity-log service.
   const actionOptions = useMemo(
     () =>
       [
@@ -39,6 +41,7 @@ function ActivityLogs({
     [activityLogs]
   );
 
+  // Apply the selected action, record type, and date range to the hook's text-search results.
   const filteredLogs = useMemo(() => {
     const from = fromDate ? new Date(`${fromDate}T00:00:00`) : null;
     const to = toDate ? new Date(`${toDate}T23:59:59.999`) : null;
@@ -183,69 +186,99 @@ function ActivityLogs({
         </div>
       </div>
 
-      <div className="activity-filters">
-        <label className="activity-search-field">
-          Search
-          <input
-            type="search"
-            value={activityLogsSearch}
-            onChange={(event) =>
-              setActivityLogsSearch(event.target.value)
-            }
-            placeholder="Search user, action, record type, or details..."
-            aria-label="Search activity logs"
-          />
-        </label>
+      <div
+        className="activity-filters"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: "14px",
+        }}
+      >
+        <div
+          className="activity-filter-main-row"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "minmax(260px, 2fr) minmax(160px, 1fr) minmax(170px, 1fr)",
+            gap: "14px",
+            alignItems: "end",
+            width: "100%",
+          }}
+        >
+          <label className="activity-search-field" style={{ gridColumn: "auto", minWidth: 0 }}>
+            Search
+            <input
+              type="search"
+              value={activityLogsSearch}
+              onChange={(event) =>
+                setActivityLogsSearch(event.target.value)
+              }
+              placeholder="Search user, action, record type, or details..."
+              aria-label="Search activity logs"
+            />
+          </label>
 
-        <label>
-          Action
-          <select
-            value={actionFilter}
-            onChange={(event) => setActionFilter(event.target.value)}
-          >
-            <option value="all">All actions</option>
-            {actionOptions.map((action) => (
-              <option key={action} value={action}>
-                {action}
-              </option>
-            ))}
-          </select>
-        </label>
+          <label>
+            Action
+            <select
+              value={actionFilter}
+              onChange={(event) => setActionFilter(event.target.value)}
+            >
+              <option value="all">All actions</option>
+              {actionOptions.map((action) => (
+                <option key={action} value={action}>
+                  {action}
+                </option>
+              ))}
+            </select>
+          </label>
 
-        <label>
-          Record type
-          <select
-            value={recordTypeFilter}
-            onChange={(event) => setRecordTypeFilter(event.target.value)}
-          >
-            <option value="all">All record types</option>
-            {recordTypeOptions.map((type) => (
-              <option key={type} value={type}>
-                {type}
-              </option>
-            ))}
-          </select>
-        </label>
+          <label>
+            Record type
+            <select
+              value={recordTypeFilter}
+              onChange={(event) => setRecordTypeFilter(event.target.value)}
+            >
+              <option value="all">All record types</option>
+              {recordTypeOptions.map((type) => (
+                <option key={type} value={type}>
+                  {type}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
 
-        <label>
-          From date
-          <input
-            type="date"
-            value={fromDate}
-            max={toDate || undefined}
-            onChange={(event) => setFromDate(event.target.value)}
-          />
-        </label>
+        <div
+          className="activity-filter-date-row"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(2, minmax(220px, 1fr))",
+            gap: "14px",
+            alignItems: "end",
+            width: "100%",
+            maxWidth: "760px",
+          }}
+        >
+          <label>
+            From date
+            <input
+              type="date"
+              value={fromDate}
+              max={toDate || undefined}
+              onChange={(event) => setFromDate(event.target.value)}
+            />
+          </label>
 
-        <label>
-          To date
-          <input
-            type="date"
-            value={toDate}
-            min={fromDate || undefined}
-            onChange={(event) => setToDate(event.target.value)}
-          />
-        </label>
+          <label>
+            To date
+            <input
+              type="date"
+              value={toDate}
+              min={fromDate || undefined}
+              onChange={(event) => setToDate(event.target.value)}
+            />
+          </label>
+        </div>
       </div>
 
       {activityLogsError && (
@@ -256,6 +289,7 @@ function ActivityLogs({
         <p className="feedback">Loading activity logs...</p>
       ) : (
         <>
+          {/* Table rows show who performed each action and what record was affected. */}
           <div className="po-table-wrapper">
             <table className="po-table">
               <thead>

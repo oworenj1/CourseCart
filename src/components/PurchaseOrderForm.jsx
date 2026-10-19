@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { formatAmount } from "../utils/formatters";
 
-
+// Search-and-select control for a PO line; its chosen product ID is stored by the parent hook.
 function ProductSearchSelect({
   products,
   value,
@@ -110,6 +110,7 @@ function ProductSearchSelect({
 }
 
 
+// Supplier counterpart to ProductSearchSelect, returning the selected supplier ID.
 function SupplierSearchSelect({
   suppliers,
   value,
@@ -214,6 +215,7 @@ function SupplierSearchSelect({
 }
 
 
+// Builds a purchase order from supplier and product rows, reporting input changes to its hook.
 function PurchaseOrderForm({
   poSuppliers,
   poProducts,
@@ -238,6 +240,7 @@ function PurchaseOrderForm({
       </div>
 
 
+      {/* The supplier and item controls are controlled by the usePurchaseOrders hook. */}
       <label>
         Supplier
         <SupplierSearchSelect
@@ -255,6 +258,7 @@ function PurchaseOrderForm({
         </p>
       )}
 
+      {/* Each row is one ordered product, quantity, and supplier unit cost. */}
       {poItems.map((item, index) => (
         <div className="po-item-row" key={index}>
           <label>

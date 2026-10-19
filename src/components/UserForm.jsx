@@ -1,3 +1,4 @@
+// Admin account form; parent hook handles validation, persistence, and feedback.
 function UserForm({
   authUser,
   userForm,
@@ -18,7 +19,9 @@ function UserForm({
             : "New accounts will be active after creation."}
         </p>
       </div>
+      {/* Controlled fields keep form edits in userForm until saveUser submits them. */}
       <div className="form-grid">
+        {/* A user cannot change their own role or status from this form. */}
         <label>
           First name
           <input

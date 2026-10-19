@@ -63,6 +63,7 @@ export function usePOS({ authUser, module, setStockMovements }) {
   const paymentValue = Number(amountPaid) || 0;
   const cartChange = Math.max(0, paymentValue - cartTotal);
 
+  // Add one item at a time while preventing the cart quantity from exceeding stock.
   const addToCart = (product) => {
     setPosError("");
     setCompletedSale(null);
@@ -130,6 +131,7 @@ export function usePOS({ authUser, module, setStockMovements }) {
     event.preventDefault();
     setPosError("");
 
+    // Validate the cart, current product availability, discount, and payment before checkout.
     if (!cart.length) {
       setPosError("Add at least one product to the cart.");
       return;
@@ -171,6 +173,7 @@ export function usePOS({ authUser, module, setStockMovements }) {
       return;
     }
 
+    // The backend records the sale and adjusts inventory; refresh the screen from its responses.
     setCheckoutSaving(true);
     try {
       const result = await createSale({

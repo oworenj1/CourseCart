@@ -1,7 +1,9 @@
 
+// All service modules use this backend API prefix and request helper.
 export const API_BASE_URL = "http://localhost:5000/api";
 
 export async function apiRequest(path, options = {}) {
+  // Reuse the saved sign-in token so protected backend routes can identify the user.
   const token = localStorage.getItem("coursecart_token");
   const headers = new Headers(options.headers || {});
 
@@ -15,6 +17,7 @@ export async function apiRequest(path, options = {}) {
 
   let response;
 
+  // Convert network failures and unsuccessful HTTP responses into useful errors for the UI.
   try {
     response = await fetch(`${API_BASE_URL}${path}`, {
       ...options,
@@ -28,6 +31,7 @@ export async function apiRequest(path, options = {}) {
 
   const data = await response.json().catch(() => null);
 
+  // A rejected session clears browser credentials and tells App to return to the login screen.
   if (response.status === 401) {
     if (token) {
       localStorage.removeItem("coursecart_token");

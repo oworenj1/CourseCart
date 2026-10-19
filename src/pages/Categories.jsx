@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import SubTabs from "../components/SubTabs";
 import CategoryForm from "../components/CategoryForm";
 
+// Category management screen: active/archive tabs, search, form, cards, and pagination.
 function Categories({
   categoryView,
   changeCategoryView,
@@ -26,6 +27,7 @@ function Categories({
   handleArchiveCategory,
   handleRestoreCategory,
 }) {
+  // Keep the card grid short; the selected page size controls how many categories appear.
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
 
@@ -41,6 +43,7 @@ function Categories({
     safeCurrentPage * pageSize
   );
 
+  // Start at the first page when the visible result set changes.
   useEffect(() => {
     setCurrentPage(1);
   }, [categorySearch, categoryView, pageSize]);
@@ -158,6 +161,7 @@ function Categories({
             <p className="feedback">No categories found.</p>
           ) : (
             <>
+              {/* Each card displays one category and the actions allowed in its current view. */}
               <div className="category-grid">
                 {paginatedCategories.map((c) => (
                   <article className="category-card" key={c._id}>
